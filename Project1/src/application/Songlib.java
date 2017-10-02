@@ -3,7 +3,9 @@ package application;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 
 import javafx.application.Application;
@@ -20,9 +22,13 @@ import org.json.simple.parser.ParseException;
 public class Songlib extends Application {
 	
 	static ArrayList<Song> masterList;
+	Stage primaryStage;
 	AnchorPane root;
+	
 	@Override
 	public void start(Stage primaryStage) {
+		this.primaryStage = primaryStage;
+		this.primaryStage.setTitle("Song Library");
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(getClass().getResource("/Scene.fxml"));
@@ -50,8 +56,8 @@ public class Songlib extends Application {
 			file.createNewFile();
 		}
 		
-//		launch(args);
-		save_session(file);
+		launch(args);
+		save_session();
 	}
 	
 	private static void load_songs(File file) throws FileNotFoundException, IOException, ParseException {
@@ -73,10 +79,30 @@ public class Songlib extends Application {
 		}
 	}
 	
-	private static void save_session(File file) {
+	private static void save_session() throws IOException {
+		
+		File file = new File("songs.json");
+		if(file.exists()) {
+			file.delete();
+		}
+		file.createNewFile();
+
+		JSONArray a = new JSONArray();
 		for(int i = 0; i < masterList.size(); i++) {
 			System.out.println(masterList.get(i).getName());
+			if(masterList.get(i).exists) {
+				JSONObject obj = new JSONObject();
+				obj.put("name", masterList.get(i).getName());
+				obj.put("artist", masterList.get(i).getArtist());
+				obj.put("album", masterList.get(i).getAlbum());
+				obj.put("year", masterList.get(i).getYear());
+				a.add(obj);
+			}
+			
 		}
+		FileWriter out = new FileWriter(file);
+		a.writeJSONString(a, out);
+		out.close();
 	}
 }
 
