@@ -1,5 +1,7 @@
 package application;
 
+import java.util.Comparator;
+
 public class Song {
 	
 	String name = "";
@@ -49,7 +51,20 @@ public class Song {
 	
 	public void checkExists(boolean check) {
 		this.exists = check;
+	}	
+	
+	public static class Compare implements Comparator<Song>{
+
+		@Override
+		public int compare(Song o1, Song o2) {
+			// TODO Auto-generated method stub
+			return o1.getName().compareToIgnoreCase(o2.getName());
+		}
+		
+		public boolean equals(Song o1, Song o2) {
+			return o1.getName().toLowerCase().equals(o2.getName().toLowerCase()) 
+					&& o1.getArtist().toLowerCase().equals(o2.getArtist().toLowerCase());
+		}
+		
 	}
-	
-	
 }

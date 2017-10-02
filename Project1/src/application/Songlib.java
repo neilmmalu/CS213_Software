@@ -60,9 +60,9 @@ public class Songlib extends Application {
 			JSONArray a = (JSONArray) parser.parse(new FileReader(file));
 			for(Object obj: a) {
 				JSONObject Song = (JSONObject)obj;
-				String song_name = (String)Song.get("name");
-				String song_artist = (String)Song.get("artist");
-				String song_album = (String)Song.get("album");
+				String song_name = String.valueOf(Song.get("name"));
+				String song_artist = String.valueOf(Song.get("artist"));
+				String song_album = String.valueOf(Song.get("album"));
 				int song_year = Integer.parseInt(String.valueOf(Song.get("year")));
 				Song song = new Song(song_name, song_artist, song_album, song_year);
 				masterList.add(song);
