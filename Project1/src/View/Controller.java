@@ -143,7 +143,7 @@ public class Controller implements Initializable{
 	}
 	
 	public void delete_song(ActionEvent event) {
-		
+
 	}
 	
 	public void edit_song(ActionEvent event) {

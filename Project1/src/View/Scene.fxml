@@ -24,7 +24,11 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TextArea fx:id="SongDetails" editable="false" prefHeight="200.0" prefWidth="200.0" />
+                        <VBox>
+                           <children>
+                              <TextArea fx:id="SongDetails" editable="false" prefHeight="88.0" prefWidth="250.0" />
+                           </children>
+                        </VBox>
                         <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                            <children>
                               <AnchorPane prefHeight="300.0" prefWidth="250.0">
