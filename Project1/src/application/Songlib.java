@@ -56,7 +56,7 @@ public class Songlib extends Application {
 			file.createNewFile();
 		}
 		
-		launch(args);
+//		launch(args);
 		save_session();
 	}
 	
@@ -86,22 +86,19 @@ public class Songlib extends Application {
 			file.delete();
 		}
 		file.createNewFile();
-
-		JSONArray a = new JSONArray();
+		
+		JSONArray library = new JSONArray();
 		for(int i = 0; i < masterList.size(); i++) {
-			System.out.println(masterList.get(i).getName());
-			if(masterList.get(i).exists) {
-				JSONObject obj = new JSONObject();
-				obj.put("name", masterList.get(i).getName());
-				obj.put("artist", masterList.get(i).getArtist());
-				obj.put("album", masterList.get(i).getAlbum());
-				obj.put("year", masterList.get(i).getYear());
-				a.add(obj);
-			}
+			JSONObject song = new JSONObject();
+			song.put("name", masterList.get(i).getName());
+			song.put("artist", masterList.get(i).getArtist());
+			song.put("album", masterList.get(i).getAlbum());
+			song.put("year", masterList.get(i).getYear());
+			library.add(song);
 			
 		}
 		FileWriter out = new FileWriter(file);
-		a.writeJSONString(a, out);
+		library.writeJSONString(library, out);
 		out.close();
 	}
 }
