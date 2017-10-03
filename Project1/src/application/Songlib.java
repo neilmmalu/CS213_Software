@@ -25,6 +25,7 @@ public class Songlib extends Application {
 	
 	public static ArrayList<Song> masterList;
 	public static Stage primaryStage;
+	public static Song first;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -41,38 +42,10 @@ public class Songlib extends Application {
 		}
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException, IOException, ParseException {
-		masterList = new ArrayList<Song>();
-		File file = new File("songs.json");
-		if(file.exists()) {
-			load_songs(file);
-		}
-		else {
-			System.out.println("not exists");
-			file.createNewFile();
-		}
+	public static void main(String[] args) throws FileNotFoundException, IOException, ParseException {		
 		
 		launch(args);
 		save_session();
-	}
-	
-	private static void load_songs(File file) throws FileNotFoundException, IOException, ParseException {
-		JSONParser parser = new JSONParser();
-		try {
-			JSONArray a = (JSONArray) parser.parse(new FileReader(file));
-			for(Object obj: a) {
-				JSONObject Song = (JSONObject)obj;
-				String song_name = String.valueOf(Song.get("name"));
-				String song_artist = String.valueOf(Song.get("artist"));
-				String song_album = String.valueOf(Song.get("album"));
-				int song_year = Integer.parseInt(String.valueOf(Song.get("year")));
-				Song song = new Song(song_name, song_artist, song_album, song_year);
-				masterList.add(song);
-			}
-		}
-		catch(ParseException e) {
-			
-		}
 	}
 	
 	private static void save_session() throws IOException {
@@ -83,15 +56,17 @@ public class Songlib extends Application {
 		}
 		file.createNewFile();
 		
+		first = Controller.head;
+		Song temp = first;
 		JSONArray library = new JSONArray();
-		for(int i = 0; i < masterList.size(); i++) {
+		while(temp != null) {
 			JSONObject song = new JSONObject();
-			song.put("name", masterList.get(i).getName());
-			song.put("artist", masterList.get(i).getArtist());
-			song.put("album", masterList.get(i).getAlbum());
-			song.put("year", masterList.get(i).getYear());
+			song.put("name", temp.getName());
+			song.put("artist", temp.getArtist());
+			song.put("album", temp.getAlbum());
+			song.put("year", temp.getYear());
 			library.add((JSONObject)song);
-			
+			temp = temp.next;
 		}
 		FileWriter out = new FileWriter(file);
 		library.writeJSONString(library, out);

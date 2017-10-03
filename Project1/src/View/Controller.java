@@ -1,8 +1,17 @@
 package View;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import application.Song;
 import javafx.collections.*;
@@ -34,22 +43,49 @@ public class Controller implements Initializable{
 	
 	public ObservableList<String> list_view;
 	private ArrayList<Song> songs;
+	public static Song head;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		ArrayList<Song> masterList = Songlib.masterList;
+		head = Songlib.first;
 		Stage primaryStage = Songlib.primaryStage;
-		list_view = FXCollections.observableArrayList();
-		this.songs = masterList;
-		for(int i = 0; i < masterList.size(); i++) {
-			if(masterList.isEmpty()) {
-				break;
+		File file = new File("songs.json");
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			list_view.add(masterList.get(i).getName());
+		}
+		JSONParser parser = new JSONParser();
+		try {
+			JSONArray a = (JSONArray) parser.parse(new FileReader(file));
+			for(Object obj: a) {
+				JSONObject Song = (JSONObject)obj;
+				String song_name = String.valueOf(Song.get("name"));
+				String song_artist = String.valueOf(Song.get("artist"));
+				String song_album = String.valueOf(Song.get("album"));
+				int song_year = Integer.parseInt(String.valueOf(Song.get("year")));
+//				System.out.println(song_name);
+				add_song(song_name, song_artist, song_album, song_year);
+			}
+		}
+		catch(ParseException e) {
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-		if(SongList == null) {
-			System.out.println("check");
+		list_view = FXCollections.observableArrayList();
+		Song temp = head;
+		while(temp != null) {
+			list_view.add(temp.getName());
+			temp = temp.next;
 		}
 		
 		SongList.setItems(list_view);
@@ -92,14 +128,6 @@ public class Controller implements Initializable{
 	public void displaySongs(Stage primaryStage) {
 		int index = SongList.getSelectionModel().getSelectedIndex();
 		if(index == -1) {
-			for(int i = 0; i < songs.size(); i++) {
-				if(songs.get(i).exists) {
-					index = i;
-					break;
-				}
-			}
-		}
-		if(index == -1) {
 			index = 0;
 		}
 		SongList.getSelectionModel().clearAndSelect(index);
@@ -107,10 +135,22 @@ public class Controller implements Initializable{
 	}
 	
 	public void setDetails(int index) {
-		String song_name = songs.get(index).getName();
-		String song_artist = songs.get(index).getArtist();
-		String song_album = songs.get(index).getAlbum();
-		String song_year = Integer.toString(songs.get(index).getYear());
+		Song temp = head;
+		for(int i = 0; i < index; i++) {
+			if(temp.next != null) {
+				temp = temp.next;
+			}
+			else {
+				break;
+			}
+		}
+		if(temp == null) {
+			return;
+		}
+		String song_name = temp.getName();
+		String song_artist = temp.getArtist();
+		String song_album = temp.getAlbum();
+		String song_year = Integer.toString(temp.getYear());
 		SongDetails.setText("Name: "+song_name+ "\nArtist: "+song_artist+"\nAlbum: "+song_album+"\nYear: "+song_year);
 	}
 	
@@ -139,7 +179,7 @@ public class Controller implements Initializable{
 			alert.showAndWait();
 		}
 		
-//		add_song(song_name, song_artist, song_album, song_year);
+		add_song(song_name, song_artist, song_album, song_year);
 	}
 	
 	public void delete_song(ActionEvent event) {
@@ -152,18 +192,75 @@ public class Controller implements Initializable{
 
 	
 	
-/*	private void add_song(String song_name, String song_artist, String song_album, int song_year) {
+	public void add_song(String song_name, String song_artist, String song_album, int song_year) {
+
 		boolean check = check_duplicate(song_name, song_artist);
-		
-		if(!check) {
+		if (!check) {
 			Song song = new Song(song_name, song_artist, song_album, song_year);
-		}else {
+			Song curr = head;
+			if (curr == null) {
+				head = song;
+				return;
+			}
+			while(curr.next != null && compare(curr, song) <0 ) {
+				curr = curr.next;
+			}
+			if(curr.next == null) {
+				curr.next = song;
+				song.next = null;
+			}else {
+				//compare(curr, song) returns > 0
+				song.next = curr.next;
+				curr.next = song;
+			}
+		}	
+		else {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Duplicate Song");
 			alert.setContentText("Song already exists. Please try again");
 			alert.showAndWait();
 			return;
 		}
-	}*/
+		
+	}
+	
+	public Boolean check_duplicate(String song_name, String song_artist) {
+		Song curr = head;
+		while (curr != null) {
+			if(curr.getName().equalsIgnoreCase(song_name)  && curr.getArtist().equalsIgnoreCase(song_artist)) {
+				return true;
+			}
+			curr = curr.next;
+		}
+		return false;
+	}
+	
+	public int compare(Song song1, Song song2) {
+		try {
+			int result = song1.getName().compareToIgnoreCase(song2.getName());
+			if (result == 0) {
+				result = song1.getArtist().compareToIgnoreCase(song2.getArtist());
+			}
+			return result;
+		}
+		catch(NullPointerException e) {
+			e.printStackTrace();
+		}
+		return 0;
+		
+	}
+	
+	private void print(Song song) {
+		if(song == null) {
+			return;
+		}
+		Song temp = song;
+		while(temp != null) {
+			if(temp != null) {
+				System.out.println(temp.getName());
+			}
+			temp = temp.next;
+		}
+	}
 	
 }

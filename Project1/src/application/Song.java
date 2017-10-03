@@ -9,6 +9,7 @@ public class Song {
 	String album = "";
 	int year = 0;
 	public boolean exists = false;
+	public Song next = null;
 	
 	public Song(String name, String artist, String album, int year) {
 		this.name = name;
@@ -53,18 +54,18 @@ public class Song {
 		this.exists = check;
 	}	
 	
-	public static class Compare implements Comparator<Song>{
-
-		@Override
-		public int compare(Song o1, Song o2) {
-			// TODO Auto-generated method stub
-			return o1.getName().compareToIgnoreCase(o2.getName());
-		}
-		
-		public boolean equals(Song o1, Song o2) {
-			return o1.getName().toLowerCase().equals(o2.getName().toLowerCase()) 
-					&& o1.getArtist().toLowerCase().equals(o2.getArtist().toLowerCase());
-		}
-		
-	}
+//	public static class Compare implements Comparator<Song>{
+//
+//		@Override
+//		public int compare(Song o1, Song o2) {
+//			// TODO Auto-generated method stub
+//			return o1.getName().compareToIgnoreCase(o2.getName());
+//		}
+//		
+//		public boolean equals(Song o1, Song o2) {
+//			return o1.getName().toLowerCase().equals(o2.getName().toLowerCase()) 
+//					&& o1.getArtist().toLowerCase().equals(o2.getArtist().toLowerCase());
+//		}
+//		
+//	}
 }
