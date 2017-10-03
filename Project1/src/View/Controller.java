@@ -84,7 +84,7 @@ public class Controller implements Initializable{
 		list_view = FXCollections.observableArrayList();
 		Song temp = head;
 		while(temp != null) {
-			list_view.add(temp.getName());
+			list_view.add(temp.getName() + " - "+temp.getArtist());
 			temp = temp.next;
 		}
 		
@@ -216,6 +216,7 @@ public class Controller implements Initializable{
 			}
 			if(temp == head) {
 				if(head == null) {
+					SongDetails.setText("");
 					update_list();
 					return;
 				}
@@ -353,11 +354,14 @@ public class Controller implements Initializable{
 		list_view = FXCollections.observableArrayList();
 		while(temp != null) {
 			if(temp != null) {
-				list_view.add(temp.getName());
+				list_view.add(temp.getName() + " - "+temp.getArtist());
 			}
 			temp = temp.next;
 		}
 		SongList.setItems(list_view);
+		if(list_view.isEmpty()) {
+			SongDetails.setText("");
+		}
 	}
 	
 }
