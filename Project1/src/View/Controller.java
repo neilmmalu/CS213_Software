@@ -208,15 +208,18 @@ public class Controller implements Initializable{
 			while(curr.next != null && compare(curr, song) < 0) {
 				curr = curr.next;
 			}
-			
-			if(curr.next == null) {
+			if (curr == head) {
+				song.next = curr;
+				head = song;
+			}else if(curr.next == null) {
 				curr.next = song;
 				song.next = null;
-			}else {
+			}else{
 				//compare(curr, song) returns > 0
 				song.next = curr.next;
 				curr.next = song;
 			}
+			print(head);
 			
 		}	
 		else if(read){
