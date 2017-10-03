@@ -23,7 +23,6 @@ import View.Controller;
 
 public class Songlib extends Application {
 	
-	public static ArrayList<Song> masterList;
 	public static Stage primaryStage;
 	public static Song first;
 	
@@ -45,7 +44,7 @@ public class Songlib extends Application {
 	public static void main(String[] args) throws FileNotFoundException, IOException, ParseException {		
 		
 		launch(args);
-		save_session();
+//		save_session();
 	}
 	
 	private static void save_session() throws IOException {

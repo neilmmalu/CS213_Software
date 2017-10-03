@@ -42,8 +42,8 @@ public class Controller implements Initializable{
 	@FXML TextField SongYearAdd;
 	
 	public ObservableList<String> list_view;
-	private ArrayList<Song> songs;
 	public static Song head;
+	public boolean read = false;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -80,7 +80,7 @@ public class Controller implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		read = true;
 		list_view = FXCollections.observableArrayList();
 		Song temp = head;
 		while(temp != null) {
@@ -98,9 +98,11 @@ public class Controller implements Initializable{
 				// TODO Auto-generated method stub
 				if(event.getCode() == KeyCode.UP) {
 					int index = SongList.getSelectionModel().getSelectedIndex();
+					
 					if(index != 0) {
 						index--;
 					}
+					System.out.println(index);
 					SongList.getSelectionModel().select(index);
 					displaySongs(primaryStage);
 				}
@@ -180,6 +182,7 @@ public class Controller implements Initializable{
 		}
 		
 		add_song(song_name, song_artist, song_album, song_year);
+		updateList();
 	}
 	
 	public void delete_song(ActionEvent event) {
@@ -193,18 +196,19 @@ public class Controller implements Initializable{
 	
 	
 	public void add_song(String song_name, String song_artist, String song_album, int song_year) {
-
 		boolean check = check_duplicate(song_name, song_artist);
 		if (!check) {
+			
 			Song song = new Song(song_name, song_artist, song_album, song_year);
 			Song curr = head;
 			if (curr == null) {
 				head = song;
 				return;
 			}
-			while(curr.next != null && compare(curr, song) <0 ) {
+			while(curr.next != null && compare(curr, song) < 0) {
 				curr = curr.next;
 			}
+			
 			if(curr.next == null) {
 				curr.next = song;
 				song.next = null;
@@ -213,8 +217,9 @@ public class Controller implements Initializable{
 				song.next = curr.next;
 				curr.next = song;
 			}
+			
 		}	
-		else {
+		else if(read){
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Duplicate Song");
 			alert.setContentText("Song already exists. Please try again");
@@ -261,6 +266,20 @@ public class Controller implements Initializable{
 			}
 			temp = temp.next;
 		}
+	}
+	
+	public void updateList() {
+		Song temp = head;
+		for(int i = 0; i < list_view.size(); i++) {
+			list_view.remove(i);
+		}
+		while(temp != null) {
+			if(temp != null) {
+				list_view.add(temp.getName());
+			}
+			temp = temp.next;
+		}
+		SongList.setItems(list_view);
 	}
 	
 }
