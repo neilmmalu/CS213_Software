@@ -182,11 +182,32 @@ public class Controller implements Initializable{
 		}
 		
 		add_song(song_name, song_artist, song_album, song_year);
-		updateList();
+		update_list();
 	}
 	
 	public void delete_song(ActionEvent event) {
-
+		int index = SongList.getSelectionModel().getSelectedIndex();
+		Song temp = head;
+		Song prev = temp;
+		for(int i = 0; i < index; i++) {
+			prev = temp;
+			if(temp.next != null) {
+				temp = temp.next;
+			}
+		}
+		if(temp == head) {
+			if(head == null) {
+				update_list();
+				return;
+			}
+			head = head.next;
+			update_list();
+			return;
+		}
+		System.out.println(prev.getName());
+		prev.next = temp.next;
+		update_list();
+		SongList.getSelectionModel().select(index);
 	}
 	
 	public void edit_song(ActionEvent event) {
@@ -268,8 +289,13 @@ public class Controller implements Initializable{
 		}
 	}
 	
-	public void updateList() {
+	public void update_list() {
 		Song temp = head;
+		print(head);
+		if(head == null) {
+			SongList.getItems().clear();
+		}
+		
 		for(int i = 0; i < list_view.size(); i++) {
 			list_view.remove(i);
 		}
