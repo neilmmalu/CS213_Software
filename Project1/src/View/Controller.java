@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.json.simple.JSONArray;
@@ -97,24 +98,11 @@ public class Controller implements Initializable{
 				// TODO Auto-generated method stub
 				if(event.getCode() == KeyCode.UP) {
 					int index = SongList.getSelectionModel().getSelectedIndex();
-<<<<<<< HEAD
 					setDetails(index - 1);
 				}
 				if(event.getCode() == KeyCode.DOWN) {
 					int index = SongList.getSelectionModel().getSelectedIndex();
 					setDetails(index + 1);
-=======
-//					System.out.println("Prev index: "+ (index));
-//					System.out.println("Curr index: "+ (index-1));
-					setDetails(index-1);
-					
-				}
-				if(event.getCode() == KeyCode.DOWN) {
-					int index = SongList.getSelectionModel().getSelectedIndex();
-//					System.out.println("Prev index: "+ (index-1));
-//					System.out.println("Curr index: "+ index);
-					setDetails(index+1);
->>>>>>> refs/remotes/origin/master
 				}
 			}
 			
@@ -167,6 +155,7 @@ public class Controller implements Initializable{
 			alert.setTitle("Invalid Input");
 			alert.setContentText("Song name and artist required. Please try again");
 			alert.showAndWait();
+			return;
 		}
 		
 		String song_name = SongNameAdd.getText();
@@ -185,43 +174,68 @@ public class Controller implements Initializable{
 				alert.setTitle("Invalid Input");
 				alert.setContentText("Song year should be an integer. Please try again");
 				alert.showAndWait();
+				return;
 			}
 		}
 		
-		int index = add_song(song_name, song_artist, song_album, song_year);
-		update_list();
-		SongList.getSelectionModel().select(index);
-<<<<<<< HEAD
-		displaySongs(Songlib.primaryStage);
-=======
-		setDetails(index);
->>>>>>> refs/remotes/origin/master
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirm Add");
+		alert.setContentText("Are you sure you want to add this song?");
+		Optional<ButtonType> result = alert.showAndWait();
+		if(result.get() == ButtonType.OK) {
+			int index = add_song(song_name, song_artist, song_album, song_year);
+			update_list();
+			SongList.getSelectionModel().select(index);
+			displaySongs(Songlib.primaryStage);
+			setDetails(index);
+			SongNameAdd.setText("");
+			SongArtistAdd.setText("");
+			SongAlbumAdd.setText("");
+			SongYearAdd.setText("");
+		}
+		else {
+			return;
+		}
 	}
 	
 	public void delete_song(ActionEvent event) {
 		int index = SongList.getSelectionModel().getSelectedIndex();
-		Song temp = head;
-		Song prev = temp;
-		for(int i = 0; i < index; i++) {
-			prev = temp;
-			if(temp.next != null) {
-				temp = temp.next;
+		
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirm Delete");
+		alert.setContentText("Are you sure you want to delete this song?");
+		Optional<ButtonType> result = alert.showAndWait();
+		if(result.get() == ButtonType.OK) {
+			Song temp = head;
+			Song prev = temp;
+			for(int i = 0; i < index; i++) {
+				prev = temp;
+				if(temp.next != null) {
+					temp = temp.next;
+				}
 			}
-		}
-		if(temp == head) {
-			if(head == null) {
+			if(temp == head) {
+				if(head == null) {
+					update_list();
+					return;
+				}
+				head = head.next;
+				SongList.getSelectionModel().select(index + 1);
+				setDetails(index);
 				update_list();
 				return;
 			}
-			head = head.next;
+			prev.next = temp.next;
 			update_list();
-			return;
+			if(temp.next == null) {
+				SongList.getSelectionModel().select(index - 1);
+				setDetails(index);
+				return;
+			}
+			SongList.getSelectionModel().select(index);
+			setDetails(index);
 		}
-		System.out.println(prev.getName());
-		prev.next = temp.next;
-		update_list();
-		SongList.getSelectionModel().select(index);
-		setDetails(index);
+		
 	}
 	
 	public void edit_song(ActionEvent event) {
