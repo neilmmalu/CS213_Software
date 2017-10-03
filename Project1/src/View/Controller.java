@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import org.json.simple.JSONArray;
@@ -102,7 +101,7 @@ public class Controller implements Initializable{
 					if(index != 0) {
 						index--;
 					}
-					System.out.println(index);
+					System.out.println("Pressed up: "+index);
 					SongList.getSelectionModel().select(index);
 					displaySongs(primaryStage);
 				}
@@ -111,6 +110,7 @@ public class Controller implements Initializable{
 					if(index < list_view.size()) {
 						index++;
 					}
+					System.out.println("Pressed down: "+index);
 					SongList.getSelectionModel().select(index);
 					displaySongs(primaryStage);
 				}
@@ -153,6 +153,9 @@ public class Controller implements Initializable{
 		String song_artist = temp.getArtist();
 		String song_album = temp.getAlbum();
 		String song_year = Integer.toString(temp.getYear());
+		if(temp.getYear() == 0) {
+			song_year = "";
+		}
 		SongDetails.setText("Name: "+song_name+ "\nArtist: "+song_artist+"\nAlbum: "+song_album+"\nYear: "+song_year);
 	}
 	
@@ -171,18 +174,22 @@ public class Controller implements Initializable{
 			song_album = SongAlbumAdd.getText();
 		}
 		int song_year = 0;
-		try {
-			song_year = Integer.parseInt(SongYearAdd.getText());
-		}
-		catch(NumberFormatException e) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Invalid Input");
-			alert.setContentText("Song year should be an integer. Please try again");
-			alert.showAndWait();
+		if(!SongYearAdd.getText().equals("")) {
+			try {
+				song_year = Integer.parseInt(SongYearAdd.getText());
+			}
+			catch(NumberFormatException e) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Invalid Input");
+				alert.setContentText("Song year should be an integer. Please try again");
+				alert.showAndWait();
+			}
 		}
 		
+		int index = SongList.getSelectionModel().getSelectedIndex();
 		add_song(song_name, song_artist, song_album, song_year);
 		update_list();
+		SongList.getSelectionModel().select(index);
 	}
 	
 	public void delete_song(ActionEvent event) {
@@ -240,7 +247,6 @@ public class Controller implements Initializable{
 				song.next = curr.next;
 				curr.next = song;
 			}
-			print(head);
 			
 		}	
 		else if(read){
@@ -294,14 +300,10 @@ public class Controller implements Initializable{
 	
 	public void update_list() {
 		Song temp = head;
-		print(head);
 		if(head == null) {
-			SongList.getItems().clear();
+			SongList.getItems().removeAll();
 		}
-		
-		for(int i = 0; i < list_view.size(); i++) {
-			list_view.remove(i);
-		}
+		list_view = FXCollections.observableArrayList();
 		while(temp != null) {
 			if(temp != null) {
 				list_view.add(temp.getName());
