@@ -97,22 +97,11 @@ public class Controller implements Initializable{
 				// TODO Auto-generated method stub
 				if(event.getCode() == KeyCode.UP) {
 					int index = SongList.getSelectionModel().getSelectedIndex();
-					
-					if(index != 0) {
-						index--;
-					}
-					System.out.println("Pressed up: "+index);
-					SongList.getSelectionModel().select(index);
-					displaySongs(primaryStage);
+					setDetails(index - 1);
 				}
 				if(event.getCode() == KeyCode.DOWN) {
 					int index = SongList.getSelectionModel().getSelectedIndex();
-					if(index < list_view.size()) {
-						index++;
-					}
-					System.out.println("Pressed down: "+index);
-					SongList.getSelectionModel().select(index);
-					displaySongs(primaryStage);
+					setDetails(index + 1);
 				}
 			}
 			
@@ -190,6 +179,7 @@ public class Controller implements Initializable{
 		add_song(song_name, song_artist, song_album, song_year);
 		update_list();
 		SongList.getSelectionModel().select(index);
+		displaySongs(Songlib.primaryStage);
 	}
 	
 	public void delete_song(ActionEvent event) {
