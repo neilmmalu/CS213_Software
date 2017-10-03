@@ -11,31 +11,28 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.Parent;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import View.Controller;
+
 
 public class Songlib extends Application {
 	
-	static ArrayList<Song> masterList;
-	Stage primaryStage;
-	AnchorPane root;
+	public static ArrayList<Song> masterList;
+	public static Stage primaryStage;
 	
 	@Override
 	public void start(Stage primaryStage) {
-		this.primaryStage = primaryStage;
-		this.primaryStage.setTitle("Song Library");
 		try {
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(getClass().getResource("/Scene.fxml"));
-			
-			root = (AnchorPane) loader.load();
-			Controller listController = loader.getController();
-			listController.start(primaryStage, masterList);
+			Songlib.primaryStage = primaryStage;
+			Parent root = FXMLLoader.load(getClass().getResource("/View/Scene.fxml"));
 			Scene scene = new Scene(root);
+			primaryStage.setTitle("Song Library");
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			primaryStage.show();
@@ -55,7 +52,7 @@ public class Songlib extends Application {
 			file.createNewFile();
 		}
 		
-//		launch(args);
+		launch(args);
 		save_session();
 	}
 	

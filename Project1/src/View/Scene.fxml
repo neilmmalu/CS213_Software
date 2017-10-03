@@ -4,7 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.Controller">
    <children>
       <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="600.0" prefWidth="500.0">
         <items>
@@ -24,14 +24,14 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TextArea fx:id="SongDetails" prefHeight="200.0" prefWidth="200.0" />
+                        <TextArea fx:id="SongDetails" editable="false" prefHeight="200.0" prefWidth="200.0" />
                         <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
                            <children>
                               <AnchorPane prefHeight="300.0" prefWidth="250.0">
                                  <children>
-                                    <Button fx:id="AddSong" layoutX="24.0" layoutY="14.0" mnemonicParsing="false" text="Add" />
-                                    <Button fx:id="EditSong" layoutX="104.0" layoutY="14.0" mnemonicParsing="false" text="Edit" />
-                                    <Button fx:id="DeleteSong" layoutX="178.0" layoutY="14.0" mnemonicParsing="false" text="Delete" />
+                                    <Button fx:id="AddSong" layoutX="24.0" layoutY="14.0" mnemonicParsing="false" onAction="#add_song" text="Add" />
+                                    <Button fx:id="EditSong" layoutX="104.0" layoutY="14.0" mnemonicParsing="false" onAction="#edit_song" text="Edit" />
+                                    <Button fx:id="DeleteSong" layoutX="178.0" layoutY="14.0" mnemonicParsing="false" onAction="#delete_song" text="Delete" />
                                     <Label layoutX="19.0" layoutY="71.0" text="Song" />
                                     <Label layoutX="19.0" layoutY="119.0" text="Artist" />
                                     <Label layoutX="20.0" layoutY="166.0" text="Album" />

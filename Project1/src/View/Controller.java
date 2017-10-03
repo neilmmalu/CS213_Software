@@ -1,19 +1,24 @@
 package View;
 
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import application.Song;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class Controller {
+import application.Song;
+import application.Songlib;
+
+public class Controller implements Initializable{
 	
 	@FXML ListView<String> SongList;
 	@FXML TextArea SongDetails;
@@ -25,13 +30,13 @@ public class Controller {
 	@FXML TextField SongAlbumAdd;
 	@FXML TextField SongYearAdd;
 	
-	private ObservableList<String> list_view;
+	public ObservableList<String> list_view;
 	private ArrayList<Song> songs;
 	
-	public void start(Stage primaryStage, ArrayList<Song> masterList) {
-		if(masterList == null) {
-			return;
-		}
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		ArrayList<Song> masterList = Songlib.masterList;
+		Stage primaryStage = Songlib.primaryStage;
 		list_view = FXCollections.observableArrayList();
 		this.songs = masterList;
 		for(int i = 0; i < masterList.size(); i++) {
@@ -41,16 +46,21 @@ public class Controller {
 			list_view.add(masterList.get(i).getName());
 		}
 		
+		if(SongList == null) {
+			System.out.println("check");
+		}
+		
 		SongList.setItems(list_view);
 		SongList.getSelectionModel().select(0);
+		displaySongs(primaryStage);
 		SongList.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
             public void handle(MouseEvent event) {
 				 displaySongs(primaryStage);
             }
 		});
-
 	}
+	
 	
 	public void displaySongs(Stage primaryStage) {
 		int index = SongList.getSelectionModel().getSelectedIndex();
@@ -112,6 +122,8 @@ public class Controller {
 	public void edit_song(ActionEvent event) {
 		
 	}
+
+	
 	
 /*	private void add_song(String song_name, String song_artist, String song_album, int song_year) {
 		boolean check = check_duplicate(song_name, song_artist);

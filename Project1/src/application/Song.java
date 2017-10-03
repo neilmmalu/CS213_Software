@@ -8,7 +8,7 @@ public class Song {
 	String artist = "";
 	String album = "";
 	int year = 0;
-	boolean exists = false;
+	public boolean exists = false;
 	
 	public Song(String name, String artist, String album, int year) {
 		this.name = name;
