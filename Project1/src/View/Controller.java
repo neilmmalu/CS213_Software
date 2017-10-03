@@ -12,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -53,6 +55,31 @@ public class Controller implements Initializable{
 		SongList.setItems(list_view);
 		SongList.getSelectionModel().select(0);
 		displaySongs(primaryStage);
+		SongList.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				// TODO Auto-generated method stub
+				if(event.getCode() == KeyCode.UP) {
+					int index = SongList.getSelectionModel().getSelectedIndex();
+					if(index != 0) {
+						index--;
+					}
+					SongList.getSelectionModel().select(index);
+					displaySongs(primaryStage);
+				}
+				if(event.getCode() == KeyCode.DOWN) {
+					int index = SongList.getSelectionModel().getSelectedIndex();
+					if(index < list_view.size()) {
+						index++;
+					}
+					SongList.getSelectionModel().select(index);
+					displaySongs(primaryStage);
+				}
+			}
+			
+		});
+		
 		SongList.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
             public void handle(MouseEvent event) {
