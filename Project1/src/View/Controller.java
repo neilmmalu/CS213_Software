@@ -91,17 +91,30 @@ public class Controller implements Initializable{
 		SongList.getSelectionModel().select(0);
 		displaySongs(primaryStage);
 		SongList.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
+			
 			@Override
 			public void handle(KeyEvent event) {
 				// TODO Auto-generated method stub
 				if(event.getCode() == KeyCode.UP) {
 					int index = SongList.getSelectionModel().getSelectedIndex();
+<<<<<<< HEAD
 					setDetails(index - 1);
 				}
 				if(event.getCode() == KeyCode.DOWN) {
 					int index = SongList.getSelectionModel().getSelectedIndex();
 					setDetails(index + 1);
+=======
+//					System.out.println("Prev index: "+ (index));
+//					System.out.println("Curr index: "+ (index-1));
+					setDetails(index-1);
+					
+				}
+				if(event.getCode() == KeyCode.DOWN) {
+					int index = SongList.getSelectionModel().getSelectedIndex();
+//					System.out.println("Prev index: "+ (index-1));
+//					System.out.println("Curr index: "+ index);
+					setDetails(index+1);
+>>>>>>> refs/remotes/origin/master
 				}
 			}
 			
@@ -175,11 +188,14 @@ public class Controller implements Initializable{
 			}
 		}
 		
-		int index = SongList.getSelectionModel().getSelectedIndex();
-		add_song(song_name, song_artist, song_album, song_year);
+		int index = add_song(song_name, song_artist, song_album, song_year);
 		update_list();
 		SongList.getSelectionModel().select(index);
+<<<<<<< HEAD
 		displaySongs(Songlib.primaryStage);
+=======
+		setDetails(index);
+>>>>>>> refs/remotes/origin/master
 	}
 	
 	public void delete_song(ActionEvent event) {
@@ -205,6 +221,7 @@ public class Controller implements Initializable{
 		prev.next = temp.next;
 		update_list();
 		SongList.getSelectionModel().select(index);
+		setDetails(index);
 	}
 	
 	public void edit_song(ActionEvent event) {
@@ -213,39 +230,47 @@ public class Controller implements Initializable{
 
 	
 	
-	public void add_song(String song_name, String song_artist, String song_album, int song_year) {
+	public int add_song(String song_name, String song_artist, String song_album, int song_year) {
 		boolean check = check_duplicate(song_name, song_artist);
+		int index = 0;
 		if (!check) {
-			
 			Song song = new Song(song_name, song_artist, song_album, song_year);
 			Song curr = head;
+			Song prev = null;
 			if (curr == null) {
 				head = song;
-				return;
+				return 0;
 			}
 			while(curr.next != null && compare(curr, song) < 0) {
+				index++;
+				prev = curr;
 				curr = curr.next;
 			}
 			if (curr == head) {
 				song.next = curr;
 				head = song;
+			}else if(compare(curr,song) > 0) {
+				prev.next = song;
+				song.next = curr;
 			}else if(curr.next == null) {
 				curr.next = song;
+				index++;
 				song.next = null;
 			}else{
 				//compare(curr, song) returns > 0
 				song.next = curr.next;
 				curr.next = song;
+				index++;
 			}
-			
 		}	
 		else if(read){
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Duplicate Song");
 			alert.setContentText("Song already exists. Please try again");
 			alert.showAndWait();
-			return;
+			return -1;
 		}
+		return index;
 		
 	}
 	
