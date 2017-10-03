@@ -260,7 +260,25 @@ public class Controller implements Initializable{
 				prev = curr;
 				curr = curr.next;
 			}
-			if (curr == head) {
+			if(curr.next == null && compare(curr,song) < 0) {
+				//insert song after current, at end of list
+				curr.next = song;
+				index++;
+				song.next = null;
+			}else if(compare(curr,song) > 0) {
+				if(curr == head) {
+					//insert song at front of list
+					song.next = curr;
+					head = song;
+				}else {
+					//insert song before current, in middle of list
+					prev.next = song;
+					song.next = curr;
+				}
+				
+			}
+			
+			/*if (curr == head) {
 				song.next = curr;
 				head = song;
 			}else if(compare(curr,song) > 0) {
@@ -275,7 +293,7 @@ public class Controller implements Initializable{
 				song.next = curr.next;
 				curr.next = song;
 				index++;
-			}
+			}*/
 		}	
 		else if(read){
 			Alert alert = new Alert(AlertType.ERROR);
