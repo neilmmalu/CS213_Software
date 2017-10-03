@@ -94,7 +94,7 @@ public class Songlib extends Application {
 			song.put("artist", masterList.get(i).getArtist());
 			song.put("album", masterList.get(i).getAlbum());
 			song.put("year", masterList.get(i).getYear());
-			library.add(song);
+			library.add((JSONObject)song);
 			
 		}
 		FileWriter out = new FileWriter(file);
