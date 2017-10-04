@@ -26,6 +26,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+
 import application.Song;
 import application.Songlib;
 
@@ -40,6 +41,8 @@ public class Controller implements Initializable{
 	@FXML TextField SongArtistAdd;
 	@FXML TextField SongAlbumAdd;
 	@FXML TextField SongYearAdd;
+	@FXML Button EditConfirm;
+	@FXML Button EditCancel;
 	
 	public ObservableList<String> list_view;
 	public static Song head;
@@ -240,7 +243,96 @@ public class Controller implements Initializable{
 	}
 	
 	public void edit_song(ActionEvent event) {
+		int index = SongList.getSelectionModel().getSelectedIndex();
+		Song temp = head;
+		for(int i = 0; i < index; i++) {
+			if(temp != null) {
+				temp = temp.next;
+			}
+		}
+		String song_name = temp.getName();
+		String song_artist = temp.getArtist();
+		String song_album = temp.getAlbum();
+		String song_year = Integer.toString(temp.getYear());
 		
+		SongNameAdd.setText(song_name);
+		SongArtistAdd.setText(song_artist);
+		SongAlbumAdd.setText(song_album);
+		SongYearAdd.setText(song_year);
+		
+		EditConfirm.setVisible(true);
+		EditCancel.setVisible(true);
+		AddSong.setDisable(true);
+		DeleteSong.setDisable(true);
+	}
+	
+	public void edit_confirmed(ActionEvent event) {
+		String new_name = SongNameAdd.getText();
+		String new_artist = SongArtistAdd.getText();
+		String new_album = SongAlbumAdd.getText();
+		int new_year;
+		if(!SongYearAdd.getText().equals("")) {
+			new_year = 0;
+		}
+		new_year = Integer.parseInt(SongYearAdd.getText());
+		
+		boolean check = check_duplicate(new_name, new_artist);
+		if(!check) {
+			int index = SongList.getSelectionModel().getSelectedIndex();
+			Song temp = head;
+			Song prev = temp;
+			for(int i = 0; i < index; i++) {
+				prev = temp;
+				if(temp != null) {
+					temp = temp.next;
+				}
+			}
+			if(temp == head) {
+				head = head.next;
+			}
+			temp.editName(new_name);
+			temp.editArtist(new_artist);
+			temp.editAlbum(new_album);
+			temp.editYear(new_year);
+			prev.next = temp.next;
+			int newIndex = add_song(new_name, new_artist, new_album, new_year);
+			AddSong.setDisable(false);
+			DeleteSong.setDisable(false);
+			SongNameAdd.setText("");
+			SongArtistAdd.setText("");
+			SongAlbumAdd.setText("");
+			SongYearAdd.setText("");
+			EditConfirm.setVisible(false);
+			EditCancel.setVisible(false);
+			update_list();
+			SongList.getSelectionModel().select(newIndex);
+			setDetails(newIndex);
+		}
+		else {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Duplicate Song");
+			alert.setContentText("Song already exists. Please try again");
+			alert.showAndWait();
+			AddSong.setDisable(false);
+			DeleteSong.setDisable(false);
+			SongNameAdd.setText("");
+			SongArtistAdd.setText("");
+			SongAlbumAdd.setText("");
+			SongYearAdd.setText("");
+			return;
+		}
+		
+	}
+	
+	public void edit_cancelled(ActionEvent event) {
+		AddSong.setDisable(false);
+		DeleteSong.setDisable(false);
+		SongNameAdd.setText("");
+		SongArtistAdd.setText("");
+		SongAlbumAdd.setText("");
+		SongYearAdd.setText("");
+		EditConfirm.setVisible(false);
+		EditCancel.setVisible(false);
 	}
 
 	

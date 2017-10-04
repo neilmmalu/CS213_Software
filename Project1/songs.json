@@ -1,13 +1,1 @@
-[{
-		"name": "Roxanne",
-		"artist": "The Police",
-		"album": "Outlandos d'Amour",
-		"year": 1979
-	},
-	{
-		"name": "Famous",
-		"artist": "Kanye West",
-		"album": "Life of pablo",
-		"year": 2016
-	}
-]
+[{"artist":"The Police","year":1979,"album":"Outlandos d'Amour","name":"Alphabet"},{"artist":"Kanye","year":2016,"album":"Life Of Pablo","name":"Famously"}]
