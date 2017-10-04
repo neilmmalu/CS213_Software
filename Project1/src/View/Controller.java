@@ -270,11 +270,20 @@ public class Controller implements Initializable{
 		String new_name = SongNameAdd.getText();
 		String new_artist = SongArtistAdd.getText();
 		String new_album = SongAlbumAdd.getText();
-		int new_year;
+		int new_year = 0;
 		if(!SongYearAdd.getText().equals("")) {
 			new_year = 0;
 		}
-		new_year = Integer.parseInt(SongYearAdd.getText());
+		try {
+			new_year = Integer.parseInt(SongYearAdd.getText());
+		}
+		catch(NumberFormatException e) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Invalid input");
+			alert.setContentText("Year needs to be an integer. Please try again");
+			alert.showAndWait();
+			return;
+		}
 		
 		boolean check = check_duplicate(new_name, new_artist);
 		if(!check) {
