@@ -1,6 +1,18 @@
-package application;
+/*
+ * Name: Neil Malu
+ * NetID: nmm182
+ * Section: 04
+ * 
+ * Name: Christopher Iverson
+ * Net ID: cji16
+ * Section: 02
+ * 
+ * Software Methodology Project 1
+ * 
+ * Song Library
+ * */
 
-import java.util.Comparator;
+package application;
 
 public class Song {
 	
@@ -11,6 +23,7 @@ public class Song {
 	public boolean exists = false;
 	public Song next = null;
 	
+	//Constructor for creating a new song abject
 	public Song(String name, String artist, String album, int year) {
 		this.name = name;
 		this.artist = artist;
@@ -18,6 +31,10 @@ public class Song {
 		this.year = year;
 	}
 	
+	
+	/*
+	 * Returns private variables in a non static way
+	 * */
 	public String getName() {
 		return this.name;
 	}
@@ -54,18 +71,4 @@ public class Song {
 		this.exists = check;
 	}	
 	
-//	public static class Compare implements Comparator<Song>{
-//
-//		@Override
-//		public int compare(Song o1, Song o2) {
-//			// TODO Auto-generated method stub
-//			return o1.getName().compareToIgnoreCase(o2.getName());
-//		}
-//		
-//		public boolean equals(Song o1, Song o2) {
-//			return o1.getName().toLowerCase().equals(o2.getName().toLowerCase()) 
-//					&& o1.getArtist().toLowerCase().equals(o2.getArtist().toLowerCase());
-//		}
-//		
-//	}
 }
