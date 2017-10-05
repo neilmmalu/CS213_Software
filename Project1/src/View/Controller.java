@@ -28,7 +28,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import application.Song;
 import javafx.collections.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -555,7 +554,7 @@ public class Controller implements Initializable{
 	
 	/*
 	 * Helper method to keep track of the main linked list and debug
-	 * */
+	 * 
 	private void print(Song song) {
 		if(song == null) {
 			return;
@@ -568,6 +567,7 @@ public class Controller implements Initializable{
 			temp = temp.next;
 		}
 	}
+	*/
 	
 	/*
 	 * Updates the list once add, edit or delete is called. Deletes the old observable list and creates a new one

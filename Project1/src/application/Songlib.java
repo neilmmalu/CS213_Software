@@ -62,6 +62,7 @@ public class Songlib extends Application {
 	 * Deletes the existing JSON file, creates a new one and stores the songs as JSONObjects in a JSONArray.
 	 * Uses FileWriter to convert the array into a JSON string and writes the output to songs.json
 	 * */
+	@SuppressWarnings("unchecked")
 	private static void save_session() throws IOException {
 		
 		File file = new File("songs.json");
@@ -90,7 +91,7 @@ public class Songlib extends Application {
 		}
 		FileWriter out = new FileWriter(file);
 		//Writing the array as a JSONString to the output file
-		library.writeJSONString(library, out);
+		JSONArray.writeJSONString(library, out);
 		out.close();
 	}
 }
